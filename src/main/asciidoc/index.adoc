@@ -1,0 +1,72 @@
+# SFG Brewery Order Service Docs
+Felipe Di Bernardi S Thiago;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+
+Sample application demonstrating how to use Spring REST Docs with Junit 5.
+
+`BeerControllerTest`:
+
+GET BEER BY ID
+
+One showing how to make a request using cURL:
+
+include::{snippets}/v1/beer-get/curl-request.adoc[]
+
+One showing the HTTP request:
+
+include::{snippets}/v1/beer-get/http-request.adoc[]
+
+And one showing the HTTP response:
+
+include::{snippets}/v1/beer-get/http-response.adoc[]
+
+Path Parameters:
+include::{snippets}/v1/beer-get/path-parameters.adoc[]
+
+Request Parameters:
+include::{snippets}/v1/beer-get/request-parameters.adoc[]
+
+Response Body:
+include::{snippets}/v1/beer-get/response-body.adoc[]
+
+Response Fields:
+include::{snippets}/v1/beer-get/response-fields.adoc[]
+
+POST NEW BEER
+
+One showing how to make a request using cURL:
+
+include::{snippets}/v1/beer-post/curl-request.adoc[]
+
+One showing the HTTP request:
+
+include::{snippets}/v1/beer-post/http-request.adoc[]
+
+And one showing the HTTP response:
+
+include::{snippets}/v1/beer-post/http-response.adoc[]
+
+Request Fields:
+include::{snippets}/v1/beer-post/request-fields.adoc[]
+
+PUT UPDATE BEER
+
+One showing how to make a request using cURL:
+
+include::{snippets}/v1/beer-put/curl-request.adoc[]
+
+One showing the HTTP request:
+
+include::{snippets}/v1/beer-put/http-request.adoc[]
+
+And one showing the HTTP response:
+
+include::{snippets}/v1/beer-put/http-response.adoc[]
+
+Request Fields:
+include::{snippets}/v1/beer-put/request-fields.adoc[]
+
+
+
