@@ -1,6 +1,8 @@
 package fdbst.springcourse.msscbeerservice.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fdbst.springcourse.msscbeerservice.bootstrap.BeerLoader;
+import fdbst.springcourse.msscbeerservice.service.BeerService;
 import fdbst.springcourse.msscbeerservice.web.model.BeerDTO;
 import fdbst.springcourse.msscbeerservice.web.model.BeerStyleEnum;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
@@ -15,6 +18,8 @@ import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.StringUtils;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -42,8 +47,13 @@ class BeerControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private BeerService beerService;
+
     @Test
     void getBeerById() throws Exception {
+        given(beerService.getBeerById(any())).willReturn(getValidBeerDTO());
+
         mockMvc.perform(get("/api/v1/beer/{beerId}", UUID.randomUUID().toString())
                 .param("iscold", "yes")
                 .accept(MediaType.APPLICATION_JSON))
@@ -72,13 +82,9 @@ class BeerControllerTest {
 
     @Test
     void saveNewBeer() throws Exception {
+        given(beerService.saveNewBeer(any())).willReturn(getValidBeerDTO());
 
-        BeerDTO beer = BeerDTO.builder()
-                .beerName("Galaxy Cat")
-                .beerStyle(BeerStyleEnum.PALE_ALE)
-                .upc(3000012156001L)
-                .price(new BigDecimal("11.95"))
-                .build();
+        BeerDTO beer = getValidBeerDTO();
         String beerJson = objectMapper.writeValueAsString(beer);
 
         ConstrainedFields fields = new ConstrainedFields(BeerDTO.class);
@@ -104,13 +110,9 @@ class BeerControllerTest {
 
     @Test
     void updateBeer() throws Exception {
+        given(beerService.updateBeer(any(), any())).willReturn(getValidBeerDTO());
 
-        BeerDTO beer = BeerDTO.builder()
-                .beerName("Galaxy Cat")
-                .beerStyle(BeerStyleEnum.PALE_ALE)
-                .upc(3000012156001L)
-                .price(new BigDecimal("12.95"))
-                .build();
+        BeerDTO beer = getValidBeerDTO();
         String beerJson = objectMapper.writeValueAsString(beer);
 
         ConstrainedFields fields = new ConstrainedFields(BeerDTO.class);
@@ -131,6 +133,15 @@ class BeerControllerTest {
                                 fields.withPath("price").description("Price"),
                                 fields.withPath("quantityOnHand").ignored()
                         )));
+    }
+
+    private BeerDTO getValidBeerDTO() {
+        return BeerDTO.builder()
+                .beerName("My Beer")
+                .beerStyle(BeerStyleEnum.PALE_ALE)
+                .price(new BigDecimal("2.99"))
+                .upc(BeerLoader.BEER_1_UPC)
+                .build();
     }
 
     private static class ConstrainedFields {
